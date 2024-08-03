@@ -1,0 +1,37 @@
+doctype html
+html
+  head
+    title Home
+
+  body
+    .header
+      h1 Projects List
+      a.create-new-project(href='/create-cobj') Create New Project
+    if projects.length === 0
+      p.placeholder No projects available. Please create a new project.
+    else
+      table
+        thead
+          tr
+            th Project Name
+            th Description
+            th Project Members
+            th Status
+            th Actions
+        tbody
+          each item in projects
+            tr
+              td= item.project.properties.name
+              td= item.project.properties.description
+              td
+                if item.contacts.length === 0
+                   div No members added
+                else
+                  ul.project-members
+                    each contact in item.contacts
+                      li= contact.firstname + ' ' + contact.lastname
+              td= item.project.properties.status
+              td 
+                a(href=`/update-cobj/${item.project.id}`) Update
+                a(href=`/delete-cobj/${item.project.id}`) Delete
+                a(href=`/add-contact/${item.project.id}`) Add Member
