@@ -1,58 +1,91 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
-
-body, * {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f7f7f7;
 }
 
-h1 {
-    margin: 1rem;
+.header {
+  margin-bottom: 20px;
 }
 
-.cards {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    flex-wrap: wrap;
+.header h1 {
+  font-size: 2em;
+  font-weight: bold;
 }
 
-.card {
-    flex-basis: 31%;
-    margin: 1rem 0.4rem;
-    padding: 1rem 0.4rem 2.5rem 0.4rem;
-    border: solid 1px lightgrey;
-    border-radius: 15px;
-    box-shadow: 3px 2px 6px lightgrey;
+.header {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 0;
 }
 
-.card__email {
-    font-size: 1rem;
+.header a:hover {
+  color: #0056b3;
 }
 
-.form-wrapper {
-    font-size: 18px;
-    max-width: 768px;
-    margin: 2rem auto;
-    padding: 2rem;
-    border: solid 1px lightgrey;
-    border-radius: 15px;
-    box-shadow: 3px 2px 6px lightgrey;
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-label, input {
-    margin-top: 5px;
-    display: block;
-    font-size: inherit;
+th,
+td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: left;
+  vertical-align: top;
 }
 
-input[type="text"] {
-    padding: .25rem;
+th {
+  background-color: #f2dede;
+  color: black;
 }
 
-input[type="submit"] {
-    background-color: lightgrey;
-    border: none;
-    padding: .375rem 1rem;
-    margin-top: 10px;
+.project-members {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.project-members li {
+  padding-left: 0;
+}
+
+.no-members-placeholder {
+  display: block;
+  color: #888;
+}
+
+.action-icons a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.action-icons a:hover {
+  color: #0056b3;
+}
+
+.action-icons {
+  gap: 10px;
+}
+
+.create-new-project {
+  color: #007bff;
+}
+
+.delete-form {
+  display: inline;
+}
+
+.delete-form button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  color: darkred;
+}
+
+.delete-form button:hover {
+  color: darkred;
 }

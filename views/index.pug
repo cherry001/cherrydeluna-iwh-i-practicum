@@ -2,7 +2,7 @@ doctype html
 html
   head
     title Home
-
+    link(rel='stylesheet' href='/css/style.css')
   body
     .header
       h1 Projects List
@@ -31,7 +31,14 @@ html
                     each contact in item.contacts
                       li= contact.firstname + ' ' + contact.lastname
               td= item.project.properties.status
-              td 
-                a(href=`/update-cobj/${item.project.id}`) Update
-                a(href=`/delete-cobj/${item.project.id}`) Delete
-                a(href=`/add-contact/${item.project.id}`) Add Member
+              td.action-icons
+                a(href=`/add-contact/${item.project.id}`) Add member
+                | &nbsp;|&nbsp;
+                a(href=`/update-cobj/${item.project.id}`) Edit Project
+                | &nbsp;|&nbsp;
+                form.delete-form(action=`/delete-cobj/${item.project.id}` method='post' onsubmit='return confirmDelete()')
+                  button(type='submit') Delete Project
+    script.
+      function confirmDelete() {
+        return confirm('Are you sure you want to delete this project?');
+      }
