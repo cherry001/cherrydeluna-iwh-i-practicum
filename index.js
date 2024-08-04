@@ -98,5 +98,34 @@ app.get('/update-cobj/:id', async (req, res) => {
 
 // TODO: ROUTE 3 - Create a new app.post route for the custom objects form to create or update your custom object data. Once executed, redirect the user to the homepage.
 
+// This route will be used for updating custom objects
+app.post('/update-cobj/:id', async (req, res) => {
+  const projectId = req.params.id;
+  const { name, description, status } = req.body;
+
+  try {
+    await hubspotClient.crm.objects.basicApi.update(
+      HUBSPOT_PROJECT_OBJECT_TYPE,
+      projectId,
+      {
+        properties: {
+          name,
+          description,
+          status,
+        },
+      }
+    );
+
+    res.redirect('/');
+  } catch (e) {
+    console.error(
+      e.message === 'HTTP request failed'
+        ? JSON.stringify(e.response, null, 2)
+        : e
+    );
+    res.status(500).send('Error updating project');
+  }
+});
+
 // * Localhost
 app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
