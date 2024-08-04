@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet' href='/css/style.css')
+  body
+    .container
+      h1 Update Project
+      form(action=`/update-cobj/${project.id}` method='post')
+        label(for='name') Project Name
+        input(type='text' name='name' value=project.properties.name required)
+        
+        label(for='description') Description
+        textarea(name='description' required)= project.properties.description
+        
+        label(for='status') Status
+        select(name='status' required)
+          option(value='In Progress' selected=project.properties.status === 'In Progress') In Progress
+          option(value='Completed' selected=project.properties.status === 'Completed') Completed
+          option(value='On Hold' selected=project.properties.status === 'On Hold') On Hold
+        
+        button(type='submit') Update Project
