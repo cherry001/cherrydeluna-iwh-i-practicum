@@ -30,3 +30,7 @@ To read the full directions, please go to the [practicum instructions](https://a
 - All work must be your own. During the grading process we will check the revision history. Submissions that do not meet this requirement will not be considered.
 - You must have at least two new routes in your index.js file and one new pug template for the homepage.
 - You must create a developer test account and link to it in your README.md file. Submissions that do not meet this requirement will not be considered.
+
+![home page](screenshots/index.png)
+![create/update project page](screenshots/update.png)
+![add contact to project page](screenshots/add-contact.png)
