@@ -103,8 +103,6 @@ app.get('/update-cobj/:id?', async (req, res) => {
 });
 
 // TODO: ROUTE 3 - Create a new app.post route for the custom objects form to create or update your custom object data. Once executed, redirect the user to the homepage.
-
-// This route will be used for creating and updating of projects
 app.post('/update-cobj/:id?', async (req, res) => {
   const projectId = req.params.id;
   const { name, description, status } = req.body;
@@ -143,6 +141,27 @@ app.post('/update-cobj/:id?', async (req, res) => {
         : e
     );
     res.status(500).send('Error updating project');
+  }
+});
+
+// This endpoint is used to delete a project
+app.post('/delete-cobj/:id', async (req, res) => {
+  const projectId = req.params.id;
+
+  try {
+    await hubspotClient.crm.objects.basicApi.archive(
+      HUBSPOT_PROJECT_OBJECT_TYPE,
+      projectId
+    );
+
+    res.redirect('/');
+  } catch (e) {
+    console.error(
+      e.message === 'HTTP request failed'
+        ? JSON.stringify(e.response, null, 2)
+        : e
+    );
+    res.status(500).send('Error deleting project');
   }
 });
 
