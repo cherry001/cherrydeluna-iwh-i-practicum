@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet' href='/css/style.css')
+  body
+    .container
+      h1 Create New Project
+      form(action='/create-cobj' method='post')
+        label(for='name') Project Name
+        input(type='text' name='name' required)
+        
+        label(for='description') Description
+        textarea(name='description' required)
+        
+        label(for='status') Status
+        select(name='status' required)
+          option(value='On Hold') On Hold
+          option(value='In Progress') In Progress
+          option(value='Completed') Completed
+        
+        button(type='submit') Create Project

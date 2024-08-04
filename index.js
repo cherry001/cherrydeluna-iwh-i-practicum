@@ -127,5 +127,37 @@ app.post('/update-cobj/:id', async (req, res) => {
   }
 });
 
+// This route is used for displaying the form to create new project
+app.get('/create-cobj', (req, res) => {
+  res.render('create', { title: 'Create New Project' });
+});
+
+// This route will be used for creating new project
+app.post('/create-cobj', async (req, res) => {
+  const { name, description, status } = req.body;
+
+  try {
+    await hubspotClient.crm.objects.basicApi.create(
+      HUBSPOT_PROJECT_OBJECT_TYPE,
+      {
+        properties: {
+          name,
+          description,
+          status,
+        },
+      }
+    );
+
+    res.redirect('/');
+  } catch (e) {
+    console.error(
+      e.message === 'HTTP request failed'
+        ? JSON.stringify(e.response, null, 2)
+        : e
+    );
+    res.status(500).send('Error creating project');
+  }
+});
+
 // * Localhost
 app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));
