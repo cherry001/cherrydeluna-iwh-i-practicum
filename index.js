@@ -165,5 +165,80 @@ app.post('/delete-cobj/:id', async (req, res) => {
   }
 });
 
+// This endpoint is used to retrieve contacts that will be rendered in the add contact form
+app.get('/add-contact/:projectId', async (req, res) => {
+  const projectId = req.params.projectId;
+
+  try {
+    const projectResponse = await hubspotClient.crm.objects.basicApi.getById(
+      HUBSPOT_PROJECT_OBJECT_TYPE,
+      projectId,
+      ['name']
+    );
+    const project = projectResponse.properties;
+
+    // Retrieve 10 contacts for demonstration purposes
+    const contactsResponse = await hubspotClient.crm.contacts.basicApi.getPage(
+      10,
+      undefined,
+      ['firstname', 'lastname', 'email']
+    );
+
+    const contacts = contactsResponse.results.map((contact) => ({
+      id: contact.id,
+      firstname: contact.properties.firstname,
+      lastname: contact.properties.lastname,
+      email: contact.properties.email,
+    }));
+
+    res.render('add-contact', {
+      title: 'Add Contact',
+      projectId,
+      project,
+      contacts,
+    });
+  } catch (e) {
+    console.error(
+      e.message === 'HTTP request failed'
+        ? JSON.stringify(e.response, null, 2)
+        : e
+    );
+    res.status(500).send('Error retrieving project or contacts');
+  }
+
+  // This endpoint is used to associate contacts with a project
+  app.post('/add-contact/:projectId', async (req, res) => {
+    const projectId = req.params.projectId;
+    const contactIds = Array.isArray(req.body.contactIds)
+      ? req.body.contactIds
+      : [req.body.contactIds];
+
+    const associations = contactIds.map((contactId) => ({
+      _from: { id: projectId },
+      to: { id: contactId },
+      type: 'contact_to_projects', // Ensure this is the correct association type
+    }));
+
+    const BatchInputPublicAssociation = { inputs: associations };
+    const fromObjectType = HUBSPOT_PROJECT_OBJECT_TYPE;
+    const toObjectType = 'contacts';
+
+    try {
+      await hubspotClient.crm.associations.batchApi.create(
+        fromObjectType,
+        toObjectType,
+        BatchInputPublicAssociation
+      );
+
+      res.redirect('/');
+    } catch (e) {
+      e.message === 'HTTP request failed'
+        ? console.error(JSON.stringify(e.response, null, 2))
+        : console.error(e);
+      res.status(500).send('Error adding contacts to project');
+    }
+  });
+});
+
 // * Localhost
 app.listen(PORT, () => console.log(`Listening on http://localhost:${PORT}`));

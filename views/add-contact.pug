@@ -1,0 +1,15 @@
+doctype html
+html
+  head
+    title= title
+    link(rel='stylesheet' href='/css/style.css')
+  body
+    .container
+      h1 Add member to #{project.name}
+      form(action=`/add-contact/${projectId}` method='post')
+        label(for='contactIds') Select Contact(s)
+        select.contact-selection(name='contactIds' multiple required)
+          each contact in contacts
+            option(value=contact.id)= `${contact.firstname} ${contact.lastname}`
+        button(type='submit') Add
+  
