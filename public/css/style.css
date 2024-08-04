@@ -89,3 +89,57 @@ th {
 .delete-form button:hover {
   color: darkred;
 }
+
+.container {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  margin: 0 auto;
+}
+
+.container h1 {
+  margin-top: 0;
+  font-size: 24px;
+}
+
+.container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.container input,
+.container textarea,
+.container select {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.container button:hover {
+  background-color: #218838;
+}
+
+.contact-selection {
+  height: 250px;
+}
+
+.placeholder {
+  font-size: 1.2em;
+  color: #888;
+}
