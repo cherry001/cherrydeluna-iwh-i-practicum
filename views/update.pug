@@ -6,17 +6,17 @@ html
   body
     .container
       h1 Update Project
-      form(action=`/update-cobj/${project.id}` method='post')
+      form(action= project ? `/update-cobj/${project.id}` : '/update-cobj' method='post')
         label(for='name') Project Name
-        input(type='text' name='name' value=project.properties.name required)
+        input(type='text' name='name' value= project ? project.properties.name : '' required)
         
         label(for='description') Description
-        textarea(name='description' required)= project.properties.description
+        textarea(name='description' required)= project ? project.properties.description : ''
         
         label(for='status') Status
         select(name='status' required)
-          option(value='In Progress' selected=project.properties.status === 'In Progress') In Progress
-          option(value='Completed' selected=project.properties.status === 'Completed') Completed
-          option(value='On Hold' selected=project.properties.status === 'On Hold') On Hold
+          option(value='On Hold' selected= project && project.properties.status === 'On Hold') On Hold
+          option(value='In Progress' selected= project && project.properties.status === 'In Progress') In Progress
+          option(value='Completed' selected= project && project.properties.status === 'Completed') Completed
         
-        button(type='submit') Update Project
+        button(type='submit')= project ? 'Update Project' : 'Create Project'

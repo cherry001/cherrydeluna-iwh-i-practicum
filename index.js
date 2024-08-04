@@ -75,46 +75,65 @@ app.get('/', async (req, res) => {
 });
 
 // TODO: ROUTE 2 - Create a new app.get route for the form to create or update new custom object data. Send this data along in the next route.
-app.get('/update-cobj/:id', async (req, res) => {
+app.get('/update-cobj/:id?', async (req, res) => {
   const projectId = req.params.id;
+  let project = null;
 
-  try {
-    const projectResponse = await hubspotClient.crm.objects.basicApi.getById(
-      HUBSPOT_PROJECT_OBJECT_TYPE,
-      projectId,
-      ['name', 'description', 'status']
-    );
-
-    res.render('update', { project: projectResponse });
-  } catch (e) {
-    console.error(
-      e.message === 'HTTP request failed'
-        ? JSON.stringify(e.response, null, 2)
-        : e
-    );
-    res.status(500).send('Error retrieving project');
+  if (projectId) {
+    try {
+      project = await hubspotClient.crm.objects.basicApi.getById(
+        HUBSPOT_PROJECT_OBJECT_TYPE,
+        projectId,
+        ['name', 'description', 'status']
+      );
+    } catch (e) {
+      console.error(
+        e.message === 'HTTP request failed'
+          ? JSON.stringify(e.response, null, 2)
+          : e
+      );
+      res.status(500).send('Error retrieving project');
+    }
   }
+
+  res.render('update', {
+    title: projectId ? 'Update Project' : 'Create Project',
+    project,
+  });
 });
 
 // TODO: ROUTE 3 - Create a new app.post route for the custom objects form to create or update your custom object data. Once executed, redirect the user to the homepage.
 
-// This route will be used for updating custom objects
-app.post('/update-cobj/:id', async (req, res) => {
+// This route will be used for creating and updating of projects
+app.post('/update-cobj/:id?', async (req, res) => {
   const projectId = req.params.id;
   const { name, description, status } = req.body;
 
   try {
-    await hubspotClient.crm.objects.basicApi.update(
-      HUBSPOT_PROJECT_OBJECT_TYPE,
-      projectId,
-      {
-        properties: {
-          name,
-          description,
-          status,
-        },
-      }
-    );
+    if (projectId) {
+      await hubspotClient.crm.objects.basicApi.update(
+        HUBSPOT_PROJECT_OBJECT_TYPE,
+        projectId,
+        {
+          properties: {
+            name,
+            description,
+            status,
+          },
+        }
+      );
+    } else {
+      await hubspotClient.crm.objects.basicApi.create(
+        HUBSPOT_PROJECT_OBJECT_TYPE,
+        {
+          properties: {
+            name,
+            description,
+            status,
+          },
+        }
+      );
+    }
 
     res.redirect('/');
   } catch (e) {
@@ -124,38 +143,6 @@ app.post('/update-cobj/:id', async (req, res) => {
         : e
     );
     res.status(500).send('Error updating project');
-  }
-});
-
-// This route is used for displaying the form to create new project
-app.get('/create-cobj', (req, res) => {
-  res.render('create', { title: 'Create New Project' });
-});
-
-// This route will be used for creating new project
-app.post('/create-cobj', async (req, res) => {
-  const { name, description, status } = req.body;
-
-  try {
-    await hubspotClient.crm.objects.basicApi.create(
-      HUBSPOT_PROJECT_OBJECT_TYPE,
-      {
-        properties: {
-          name,
-          description,
-          status,
-        },
-      }
-    );
-
-    res.redirect('/');
-  } catch (e) {
-    console.error(
-      e.message === 'HTTP request failed'
-        ? JSON.stringify(e.response, null, 2)
-        : e
-    );
-    res.status(500).send('Error creating project');
   }
 });
 
